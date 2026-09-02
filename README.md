@@ -9,9 +9,7 @@ non-blocking (async) TX/RX transfer model with completion events.
 
 ## Naming
 
-The public API is `nora_*` / `NORA_*`. This repository has carried that namespace since its
-first commit — there is no earlier `dspic33ck_*` public API here and therefore no
-compatibility aliases to remove.
+The public API is `nora_*` / `NORA_*`.
 
 The chip name survives in exactly two places, both deliberate:
 
@@ -37,10 +35,9 @@ precisely:
   `rx_ring_buffer_size`, `rx_irq_priority`), with the same field names and semantics, so a
   config literal is portable in both directions and an application written against the AK
   ISR-ring configuration compiles and runs here unchanged.
-- **`nora_uart_status_t` keeps the AK enumerator *values*.** `NORA_UART_ERR_BUSY` was
-  inserted in the middle rather than appended for exactly that reason. Nothing indexes an
-  array by this enum, so the insertion is source-compatible — but a consumer that *prints
-  the raw number* sees `_ERR_TIMEOUT` and everything after it shift by one.
+- **`nora_uart_status_t` uses the same enumerator values as the AK HAL**, including
+  `NORA_UART_ERR_BUSY`. Raw status numbers therefore have the same meaning in both
+  current public headers.
 - **What is CK-only: the baud clock configuration.** `high_speed` (BRGH) and
   `clock_source` (`BCLKSEL`: `FOSC/2`, `FOSC`, `AFPLLO`, `REFCLK`) have no equivalent on
   the AK UART, which instead takes its clock from CLKGEN8 — a block this family does not
